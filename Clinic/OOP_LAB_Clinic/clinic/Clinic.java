@@ -5,9 +5,14 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.Collector;
+import java.util.stream.*;
+
+import static java.util.stream.Collectors.*;
+import static java.util.Comparator.*;
 
 
 public class Clinic {
@@ -55,7 +60,7 @@ public class Clinic {
 	/**
 	 * returns the collection of doctors that have no patient at all, sorted in alphabetic order.
 	 */
-	Collection<Doctor> idleDoctors(){
+	public Collection<Doctor> idleDoctors(){
 		Collection<Doctor> freeDoctors = doctors.values().stream()
 				.filter(d -> d.getPatients().isEmpty())
 				.collect(Collectors.toList());
@@ -65,15 +70,21 @@ public class Clinic {
 	/**
 	 * returns the collection of doctors that a number of patients larger than the average.
 	 */
-	Collection<Doctor> busyDoctors(){
-		Map<Doctor, Collection<Person>> average = doctors.values().stream()
-				.collect(groupingBy(d -> d.getPatients, Collectors.averagingInt(d -> d.getPatients.size())));
+	public Collection<Doctor> busyDoctors(){
+		//Conto i pazienti per ogni dottore
+		Map<Doctor, Long> patientsPerDoctor = patients.values().stream()
+				.collect(groupingBy(Person::getDoctor, counting()));
 		
+		//Ottengo la media di pazienti per dottore
+		Double averagePatientsPerDoctor = patientsPerDoctor.values().stream()
+				.mapToDouble(p -> p)
+				.average().getAsDouble();
 		
-		Collection<Doctor> freeDoctors = doctors.values().stream()
-				.filter(d -> d.getPatients().isEmpty())
-				.collect(Collectors.toList());
-		return null;
+		return patients.values().stream()
+				.map(p -> p.getDoctor())
+				.distinct()
+				.filter(d -> d.getPatients().size() > averagePatientsPerDoctor)
+				.collect(toList());
 	}
 
 	/**
@@ -84,6 +95,11 @@ public class Clinic {
 	 * represent the number of patients (printed on three characters).
 	 */
 	Collection<String> doctorsByNumPatients(){
+		//restituisce una collezione di stringhe contenenti il nome del dottore
+		//ed il relativo numero di pazienti ordinati in maniera decrescente di numero.
+		//Le stringhe devono essere formattate come "### : ID SURNAME NAME" dove ### rappresenta il numero di pazienti (stampato su tre caratteri). 
+		
+		
 		return null;
 	}
 	
@@ -105,10 +121,10 @@ public class Clinic {
 			while((line = in.readLine()) != null) {
 				
 				Scanner s = new Scanner(line);
-				s.useDelimiter(";\\s");
+				s.useDelimiter(";\\s*");
 				
-				String patternP = "([P])([A-z]+)([A-z]+)(\\w+)()()";
-				String patternD = "([D])(\\d+)([A-z]+)([A-z]+)(\\w+)([A-z]+)";
+				String patternP = "([P]);([A-z]+);([A-z]+);(\\w+)";
+				String patternD = "([M]);(\\d+);([A-z]+);([A-z]+);(\\w+);([A-z]+)";
 				
 				if (line.matches(patternP)) {
 					s.next();
