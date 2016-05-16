@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<style type="text/css">
+<!--
+body {
+	margin: 0.5cm;
+	/*
+	font-size: 13px;
+	*/
+	}
+p   {
+    margin-top: 0.1em;
+    margin-bottom: 0.5em;
+    }
+b   {
+	font-family: monospace;
+	color: MidnightBlue;
+	background: #f8f8f8;
+	border-radius: 2pt;
+	padding: 1pt;
+/*
+    font-size=85%;
+	border: 1pt dotted silver;
+*/
+	}
+	
+i   {
+	color: Navy;
+	font-family: monospace;
+	}
+	
+h1  {
+	font-family: sans-serif;
+	text-align: center;
+    line-height: 1.1em;
+	}
+	
+h2  {
+    /*float: left;*/
+    margin-top: 0;
+    padding: 5px 10px 5px 0px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    line-height: 0.8em;
+	color: RoyalBlue;
+	font-family: sans-serif;
+	border-top: 1px dotted gray;
+	}
+table {
+	float: right;
+	margin: 20px;
+	border-collapse:collapse;
+	border-bottom: 1px solid Navy;
+	border-top: 1px solid Navy;
+	}
+td, th  {
+	padding: 1px 5px 1px 5px;
+	}
+tr:nth-child(even) {
+    background-color: PowderBlue;
+    margin: 1pt solid PowderBlue;
+}
+-->
+</style>
+  <title>Lab - Doctors</title>
+  <meta name="revision" content="May 19, 2015">
+  <meta name="author" content="Marco Torchiano">
+</head>
+<body>
+
+<h1 style="text-align: center;">Medical Clinic<br>
+</h1>
+Implement a system to manage patients of a medical clinic.
+The classes are hosted in package <i>clinic</i>.
+The system must meet the following requirements.
+
+<h2>R1: Patients</h2>
+The main class of the program is class <b>Clinic</b>.
+<p>
+
+Patients are characterized by the first name, the last name, and the
+unique social security number (SSN). 
+ New patients can be added
+to the system by means of method <b>addPatient()</b>.<br>
+The information about a patient can be retrieved by means of method
+<b>getPatient()</b> that given an SSN returns an object of class <b>Person</b>.
+Such class provides the getter methods for SSN, first and last names.
+If the patient does not exist, exception <b>NoSuchPatient</b> is
+thrown.
+<p>
+
+
+<h2>R2: Doctors</h2>
+Doctors are characterized by the first name, last name, SSN, unique badge ID, 
+and the specialization (e.g. "cardiologist", "dentist", etc.).
+New doctors can be added to the system by means of method <b>addDoctor()</b>.<br>
+Method <b>getDoctor()</b>, given a badge ID, returns an object of class <b>Doctor</b>.
+Such class that extends class Person and provide the getter methods for the id 
+and specialization.
+<br>
+If the doctor does not exist, exception <b>NoSuchDoctor</b> is thrown.<br>
+<p> 
+Keep in mind that doctors can be patients of the same clinic they work in.<br>
+
+<h2>R3: Patient registration</h2>
+When accepted, a patient is assigned to one of the clinic doctors. To
+this aim, method <b>assignPatientToDoctor()</b>
+is provided. Patient is identified by means of her SSN, and doctor is
+identified by means of her badge ID. If the doctor does not exist,
+exception <b>NoSuchDoctor</b> is
+thrown. Further, if the patient does not exist, exception <b>NoSuchPatient</b> is thrown.
+<br>
+By means of method <b>getDoctor()</b> of class <i>Person</i>,
+it is possible to obtain the Doctor assigned to that person.
+<p>
+By means of method <b>getPatients()</b> of class <i>Doctor</i>
+returns the list of all patients of that doctor.
+
+
+<h2>R4: Loading</h2>
+The method <b>loadData()</b> of class <i>Clinic</i> accepts a file path as a
+parameter and loads from it the information about patients and doctors.<br>
+The file is a text file organized by rows; each row contains info about
+either a patient or a doctor.<br>
+Rows containing a person's info begin with letter "P" followed by first name,
+last name, and SSN. Rows containing doctor's info start with letter "M",
+followed by badge ID, first name, last name, SSN, and specialization.<br>
+The elements on a line are separated by the ";" character.
+<p>
+In case of error in the data present on a line, the method should be able
+to ignore the row and skip to the next one.<br>
+In case of IO errors the method propagates an IOException.
+<p>
+
+
+
+<h2>R5: Statistics</h2>
+
+The method <b>idleDoctors()</b> returns the collection of
+doctors that have no patient at all, sorted in alphabetic order.
+<p>
+The method <b>busyDoctors()</b> returns the collection of
+doctors that are assigned a number of patients larger than the average.
+<p>
+The method <b>doctorsByNumPatients()</b> returns list of strings
+containing the name of the doctor and the relative number of patients
+with the relative number of patients, sorted by decreasing number.<br>
+The string must be formatted as "<i>### : ID SURNAME NAME</i>" where <i>###</i>
+represent the number of patients (printed on three characters).
+<p>
+The method <b>countPatientsPerSpecialization()</b> computes the number of
+patients per (their doctor's) specialization.
+The elements are sorted first by decreasing count and then by alphabetic specialization.<br>
+The strings are structured as "<i>### - SPECIALITY</i>" where <i>###</i>
+represent the number of patients (printed on three characters).
+
+<h3>Hint:</h3>
+<ul>
+<li> Formatting can be performed using the <i>String.format()</i> method.<br>
+	E.g. <i>String.format("%3d", i)</i> prints integer variable <i>i</i>
+	on three characters.
+</ul>
+<p>
+
+
+<!--
+<h2>R6: Saving</h2>
+The method <b>saveData()</b> accepts a file path as a parameter and
+saves the information of doctors and patients on that file, according
+to the format specified in the previous requirement.
+<p>
+ In case of IO errors the method propagates an IOException.
+<p>
+-->
+
+</body>
+</html>

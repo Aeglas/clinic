@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<style type="text/css">
+<!--
+body {
+	margin: 0.5cm;
+	/*
+	font-size: 13px;
+	*/
+	}
+p   {
+    margin-top: 0.1em;
+    margin-bottom: 0.5em;
+    }
+b   {
+	font-family: monospace;
+	color: MidnightBlue;
+	background: #f8f8f8;
+	border-radius: 2pt;
+	padding: 1pt;
+/*
+    font-size=85%;
+	border: 1pt dotted silver;
+*/
+	}
+	
+i   {
+	color: Navy;
+	font-family: monospace;
+	}
+	
+h1  {
+	font-family: sans-serif;
+	text-align: center;
+    line-height: 1.1em;
+	}
+	
+h2  {
+    /*float: left;*/
+    margin-top: 0;
+    padding: 5px 10px 5px 0px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    line-height: 0.8em;
+	color: RoyalBlue;
+	font-family: sans-serif;
+	border-top: 1px dotted gray;
+	}
+table {
+	float: right;
+	margin: 20px;
+	border-collapse:collapse;
+	border-bottom: 1px solid Navy;
+	border-top: 1px solid Navy;
+	}
+td, th  {
+	padding: 1px 5px 1px 5px;
+	}
+tr:nth-child(even) {
+    background-color: PowderBlue;
+    margin: 1pt solid PowderBlue;
+}
+-->
+</style>
+  <title>Laboratorio - Ambulatorio</title>
+  <meta name="revision" content="May 19, 2015">
+  <meta name="author" content="Marco Torchiano">
+</head>
+<body>
+
+<h1 style="text-align: center;">Ambulatorio<br>
+</h1>
+Realizzare un sistema per gestire i pazienti di un ambulatorio.
+<br>
+Le classi sono contenute nel package <i>clinic</i>.
+
+ 
+<h2>R1: Pazienti</h2>
+La classe principale del programma &egrave; <b>Clinic</b>.
+<p>
+
+I pazienti sono caratterizzati da nome, cognome, e dal codice fiscale (SSN).
+Nuovi pazienti possono essere aggiunti tamite il metodo <b>addPatient()</b>.<br>
+
+Le informazioni su un paziente possono essere recuperate tramite il metodo
+<b>getPatient()</b> che, dato un codice fiscale restituisce un oggetto di tipo <b>Person</b>.
+Tale classe fornisce i metodi getter per SSN, nome e cognome.
+<br>
+Se il paziente non esiste viene generata l'eccezione <b>NoSuchPatient</b>.
+<p>
+
+
+<h2>R2: Dottori</h2>
+
+I dottori sono caratterizzati da nome, cognome, SSN, numero di badge e dalla specializzazione 
+(es. "cardiologo", "dentista"). &Egrave; possibile aggiungere un nuovo dottore
+tramite il metodo <b>addDoctor()</b>.<br>
+Il meotdo <b>getDoctor()</b>, dato il numero di badge restituisce un oggetto di classe <b>Doctor</b>.
+Tale classe estende <i>Person</i> e fornisce i getter per il badge e la specialit&agrave;.
+<br>
+Se il dottore non esiste viene generata l'eccezione <b>NoSuchDoctor</b>.<br>
+<p> 
+Si tenga presente che un dottore potrebbe essere paziente dello stesso ambulatorio.<br>
+
+
+<h2>R3: Registrazione dei pazienti</h2>
+
+Quando sono accettati, i pazienti vengono assegnati a uno dei dottori dell'ambulatorio.
+Per questo si usa il metodo <b>assignPatientToDoctor()</b>, che accetta come
+parametri il codice fiscale del paziente ed il numero di badge del dottore. 
+Se il dottore non esiste, viene generate l'eccezione <b>NoSuchDoctor</b>, mentre
+se il paziente non esiste viene generata l'eccezione <b>NoSuchPatient</b>.
+<br>
+Tramite il metodo  <b>getDoctor()</b> della classe <i>Person</i> &egrave;
+possibile ottenere un riferimento al dottore assegnato alla persona.
+<br>
+Il metodo <b>getPatients()</b> della classe <i>Doctor</i> restituisce
+la collezione di pazienti del dottore.
+
+
+<h2>R4: Lettura</h2>
+
+Il metodo <b>loadData()</b> della classe <i>Clinic</i> accetta un path
+e legge dal corrispondente file le informazioni su pazienti e dottori.
+<p> 
+IL file &egrave; organizzato per righe; ogni riga contiene informazioni
+relative a pazienti o a dottori.<br>
+Le righe contenenti informazioni sulle persone iniziano con la lettera "<i>P</i>"
+seguita da nome, cognome, e SSN. Le righe che descrivono i dottori iniziano
+con la lettera "<i>M</i>", seguita da numero di badge, nome, cognome, SSN e specialit&agrave;.
+<br>
+Tutti gli elementi su una linea sono separati dal carattere "<i>;</i>".
+<p>
+In caso di errore nei contenuti del file, il metodo ignora la linea e passa a quella successiva.
+<br>
+In caso di errori di IO le eccezioni devono essere propagate al chiamante.
+<p>
+
+
+
+<h2>R5: Statistiche</h2>
+
+Il metodo <b>idleDoctors()</b> resituisce una collezione con tutti i dottori
+che non hanno pazienti, ordinata in ordine alfabetico.
+<p>
+Il metodo <b>busyDoctors()</b> restituisce la collezione dei dottori che hanno
+un numero di pazienti superiore alla media.
+<p>
+Il metodo <b>doctorsByNumPatients()</b> restituisce una collezione di stringhe
+contenenti il nome del dottore ed il relativo numero di pazienti
+ordinati in maniera decrescente di numero.<br>
+Le stringhe devono essere formattate come "<i>### : ID SURNAME NAME</i>"
+dove <i>###</i> rappresenta il numero di pazienti (stampato su tre caratteri).
+<p>
+Il metodo <b>countPatientsPerSpecialization()</b> conta il numero di pazienti per
+specializzazione (dei dottoir).
+Gli elementi della lista di stringhe sono ordinati prima per numero decrescente id pazienti
+e poi in ordine alfabetico di specializzazione.<br>
+Le stringhe sono strutturate come "<i>### - SPECIALITY</i>" dove <i>###</i>
+rappresenta il numero di pazienti (stampato su tre caratteri).
+
+<h3>Suggerimento:</h3>
+<ul>
+<li> Per formattare il numero di pazienti si pu&ograve; utilizzare il metodo <i>String.format()</i>.<br>
+	Ad esempio  <i>String.format("%3d", i)</i> stampa una variabile intera <i>i</i>
+	con una larghezz di tre caratteri.
+</ul>
+<p>
+
+
+<!--
+<h2>R6: Saving</h2>
+The method <b>saveData()</b> accepts a file path as a parameter and
+saves the information of doctors and patients on that file, according
+to the format specified in the previous requirement.
+<p>
+ In case of IO errors the method propagates an IOException.
+<p>
+-->
+
+</body>
+</html>
