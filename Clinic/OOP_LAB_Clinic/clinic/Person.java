@@ -30,7 +30,7 @@ public class Person {
 	}
 
 	public Doctor getDoctor() {
-		if (doctor.isPresent() == true) {
+		if (doctor != null) {
 			return doctor.get();
 		}else {
 			return null;

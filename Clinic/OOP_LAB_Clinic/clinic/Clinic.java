@@ -4,10 +4,18 @@ import java.io.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Collector;
+import java.util.stream.*;
+
+import static java.util.stream.Collectors.*;
+import static java.util.Comparator.*;
 
 
 public class Clinic {
@@ -66,14 +74,20 @@ public class Clinic {
 	 * returns the collection of doctors that a number of patients larger than the average.
 	 */
 	Collection<Doctor> busyDoctors(){
-		Map<Doctor, Collection<Person>> average = doctors.values().stream()
-				.collect(groupingBy(d -> d.getPatients, Collectors.averagingInt(d -> d.getPatients.size())));
+		//Conto i pazienti per ogni dottore
+		Map<Doctor, Long> patientsPerDoctor = patients.values().stream()
+				.collect(groupingBy(Person::getDoctor, counting()));
 		
+		//Ottengo la media di pazienti per dottore
+		Double averagePatientsPerDoctor = patientsPerDoctor.values().stream()
+				.mapToDouble(p -> p)
+				.average().getAsDouble();
 		
-		Collection<Doctor> freeDoctors = doctors.values().stream()
-				.filter(d -> d.getPatients().isEmpty())
-				.collect(Collectors.toList());
-		return null;
+		return patients.values().stream()
+				.map(p -> p.getDoctor())
+				.distinct()
+				.filter(d -> d.getPatients().size() > averagePatientsPerDoctor)
+				.collect(toList());
 	}
 
 	/**
@@ -84,7 +98,48 @@ public class Clinic {
 	 * represent the number of patients (printed on three characters).
 	 */
 	Collection<String> doctorsByNumPatients(){
-		return null;
+		//restituisce una collezione di stringhe contenenti il nome del dottore
+		//ed il relativo numero di pazienti ordinati in maniera decrescente di numero.
+		//Le stringhe devono essere formattate come "### : ID SURNAME NAME" dove ### rappresenta il numero di pazienti (stampato su tre caratteri). 
+//		
+//		List<String> lista = patients.values().stream()
+//				.sorted(comparing)
+//		
+		//fin qui ho <Doctor, Long> = <dottore, numPazienti> ordinati per dottore crescente
+//		
+//		Map<Long, List<Doctor>> list = doctorsByNumPatients.entrySet().stream()			
+//				.collect(groupingBy(e -> e.getValue(),
+//						() -> new TreeMap<Long, List<Doctor>>(reverseOrder()),
+//									mapping(e -> e.getKey(), toList())));
+//		
+//		/////////////////////////////////////
+//		
+//		List<String> prova = doctors.values().stream()
+//				.sorted(comparing((Doctor d)->d.getPatients().size()).reversed())
+//				.map( d -> String.format("%3d", d.getPatients().size()) + " : "
+//							+ d.getId() +  " " + d.getLast() + " " + d.getFirst()
+//					)
+//				.collect(toList());
+		
+//		return doctors.values().stream()
+//				.collect(groupingBy(p -> p.getPatients().size(), 
+//									() -> new TreeMap<Integer, List<Doctor>>(reverseOrder()),
+//									toList()))
+//				.entrySet().stream()
+//				.flatMap(e -> e.getValue().stream())
+//				.map(d -> String.format("%3d", d.getPatients().size() + " : " + d.getId() + " " + d.getLast() + " " + d.getFirst()))
+//				.collect(toList());
+		
+		return 	patients.values().stream()
+				.filter(p->p.getDoctor()!=null)
+				.collect(groupingBy(Person::getDoctor,counting()))
+				.entrySet().stream()
+//				.sorted(comparing(Map.Entry::getValue).reversed()) // the compiler cannot infer the type
+				.sorted(comparing(Map.Entry::getValue,reverseOrder())) // while here it can
+				.map( e -> String.format("%3d", e.getValue()) + " : "
+						+ e.getKey().getId() +  " " + e.getKey().getLast() + " " + e.getKey().getFirst()
+				)
+				.collect(toList());
 	}
 	
 	/**
@@ -105,10 +160,10 @@ public class Clinic {
 			while((line = in.readLine()) != null) {
 				
 				Scanner s = new Scanner(line);
-				s.useDelimiter(";\\s");
+				s.useDelimiter(";\\s*");
 				
-				String patternP = "([P])([A-z]+)([A-z]+)(\\w+)()()";
-				String patternD = "([D])(\\d+)([A-z]+)([A-z]+)(\\w+)([A-z]+)";
+				String patternP = "([P]);([A-z]+);([A-z]+);(\\w+)";
+				String patternD = "([M]);(\\d+);([A-z]+);([A-z]+);(\\w+);([A-z]+)";
 				
 				if (line.matches(patternP)) {
 					s.next();

@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 import clinic.Clinic;
 
 
@@ -24,6 +26,16 @@ public class ExampleApp {
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
 		}
+		
+//		try {
+//			clinic.loadData("C:\\Users\\Enrico\\Desktop\\file.txt");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		System.out.println(clinic.idleDoctors());
+//		System.out.println(clinic.busyDoctors().toString());
 
 		try {
 			clinic.getDoctor(-1);
