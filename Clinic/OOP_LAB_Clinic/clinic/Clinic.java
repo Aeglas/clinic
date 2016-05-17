@@ -150,7 +150,14 @@ public class Clinic {
 	 * represent the number of patients (printed on three characters).
 	 */
 	public Collection<String> countPatientsPerSpecialization(){
-		return null;
+		return patients.values().stream()
+				.collect(groupingBy(p -> p.getDoctor().getSpecialization(),
+						()->new TreeMap<String, Long>(reverseOrder()),
+						counting())) //Map<String, Long> =  (specialization), (#pazienti)
+				.entrySet().stream()
+				.sorted(comparing(Map.Entry::getValue, reverseOrder())) // provare a mettere e -> e.getValue() con un cast.
+				.map( e -> String.format("%3d", e.getValue()) + " - " + e.getKey())
+				.collect(toList()); //Map<String, Long>
 	}
 	
 	public void loadData(String path) throws IOException {
